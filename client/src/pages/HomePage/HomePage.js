@@ -1,26 +1,37 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux';
 import './HomePage.css'
 import Doctor_Card from '../../components/Doctor_Card/Doctor_Card';
+import { logout_user } from '../../redux/user/action';
 
-export default class HomePage extends Component {
+
+class HomePage extends Component {
     state = {
         posts: []
     }
 
     componentDidMount() {
         fetch('http://localhost:8080/getposts')
-        .then(res => res.json())
-        .then(data => this.setState({ posts: data }))
+            .then(res => res.json())
+            .then(data => this.setState({ posts: data }))
     }
 
     render() {
         return (
             <div>
-                <h1 className="banner_title">Book Doctor</h1>
+                <h1 className="banner_title">Book Doctor<span class="logout_button"><button onClick={() => {
+                    localStorage.clear()
+                    this.props.logout_user()
+                    this.props.history.push('/login')
+                }} >
+                    Logout</button></span><span class="profile"><button onClick={() => {
+                    this.props.history.push('/profile')
+                }} >
+                    Profile</button></span></h1>
                 <img src={process.env.PUBLIC_URL + "/images/banner_img.jpg"} />
                 <div className="card_container">
                     {
-                        this.state.posts.map(post =><Doctor_Card post={post}/>)
+                        this.state.posts.map(post => <Doctor_Card post={post} />)
                     }
                 </div>
 
@@ -28,3 +39,8 @@ export default class HomePage extends Component {
         )
     }
 }
+const mapDispatchToProps = dispatch => ({
+    logout_user: () => dispatch(logout_user())
+});
+
+export default connect(null, mapDispatchToProps)(HomePage);

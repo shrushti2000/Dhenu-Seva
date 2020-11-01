@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import {connect} from 'react-redux';
 import FeedbackAlert from '../../util/FeedbackAlert';
 import FeedbackModal from '../../util/FeedbackModal';
 import Footer from '../../components/Footer/Footer';
@@ -10,6 +10,7 @@ import {
 } from '../../util/Validation.js';
 
 import './Login.css';
+import { setCurrentUser } from '../../redux/user/action';
 
 class Login extends Component {
   state = {
@@ -45,7 +46,7 @@ class Login extends Component {
     errors = validateEmptyFields(this.state, errors);
     this.setState({ errors });
     this.setState({ isOpen: true });
-    fetch("http://localhost:8080/auth/login", {
+    fetch("http://localhost:5000/auth/login", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -61,6 +62,7 @@ class Login extends Component {
         else {
           localStorage.setItem("jwt", data.token)
           localStorage.setItem("userId", JSON.stringify(data.userId))
+          this.props.setCurrentUser(data.userId)
           history.push('/')
         }
       }).catch(err => {
@@ -220,4 +222,8 @@ class Login extends Component {
   }
 }
 
-export default Login;
+const mapDispatchToProps=dispatch=>({
+  setCurrentUser:user=>dispatch(setCurrentUser(user))
+});
+
+export default connect(null,mapDispatchToProps)(Login);
