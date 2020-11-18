@@ -62,6 +62,7 @@ exports.createPost = async (req, res, next) => {
   }
   catch (error) {
     console.log(error)
+    return res.status(422).json({error})
   }
 }
 // getPost function to fetch a single post of the doctor
