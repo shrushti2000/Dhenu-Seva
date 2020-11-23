@@ -3,11 +3,11 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
   reg_no: {
-    type: Number,
+    type: String,
     required: true
   },
   phone_no: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
   },
@@ -29,7 +29,7 @@ const postSchema = new Schema({
     required: true
   },
   fees: {
-    type: Number,
+    type: String,
     required: true
   },
   timings: {
@@ -53,13 +53,13 @@ const postSchema = new Schema({
     required: true
   },
   pin_code: {
-    type: Number,
+    type: String,
     required: true
   },
   website: {
     type: String
   },
-  
+ 
   // the creator
   creator: {
     type: Schema.Types.ObjectId,
@@ -70,6 +70,7 @@ const postSchema = new Schema({
   {
     timestamps: true,
   }
+  
 );
 
 module.exports = mongoose.model('Post', postSchema);

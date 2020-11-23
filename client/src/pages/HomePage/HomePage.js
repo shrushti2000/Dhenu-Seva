@@ -9,11 +9,11 @@ class HomePage extends Component {
         posts: []
     }
 
-    componentDidMount() {
-        fetch('http://localhost:8080/getposts')
+  /**   componentDidMount() {
+        fetch('/feed/posts')
             .then(res => res.json())
             .then(data => this.setState({ posts: data }))
-    }
+    }**/
 
     render() {
         return (

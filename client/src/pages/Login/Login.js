@@ -46,7 +46,7 @@ class Login extends Component {
     errors = validateEmptyFields(this.state, errors);
     this.setState({ errors });
     this.setState({ isOpen: true });
-    fetch("http://localhost:8080/auth/login", {
+    fetch("/auth/login", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

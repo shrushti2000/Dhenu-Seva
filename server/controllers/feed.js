@@ -51,7 +51,7 @@ exports.createPost = async (req, res, next) => {
     user.posts.push(post);
 
     let savedUser = await user.save();
-    res.status(201).json({
+      res.status(201).json({
       message: 'Created the post successfully',
       post: post,
       admin: {

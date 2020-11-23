@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./Doctor_details.css";
 class DoctorDetails extends Component {
   state = {
+    reg_no:"1001",
     clinic_name: "",
     speciality: "",
     experience: "",
@@ -24,13 +25,14 @@ class DoctorDetails extends Component {
 
   postData = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/feed/post", {
+    fetch("/feed/post", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + localStorage.getItem("jwt"),
+        'Authorization': "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
+        reg_no:this.state.reg_no,
         name_of_clinic: this.state.clinic_name,
         specialist: this.state.speciality,
         experience: this.state.experience,
@@ -48,15 +50,16 @@ class DoctorDetails extends Component {
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-        if (data.error) {
+        console.log(data.message);
+       /**  if (data.error) {
           console.log(data.error);
         } else {
           console.log("posted");
-        }
+        }**/
+       // console.log("posted");
       })
       .catch((err) => {
-        console.log("error");
+        console.log(err);
       });
   };
 
