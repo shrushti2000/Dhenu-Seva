@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import "./Doctor_details.css";
 class DoctorDetails extends Component {
   state = {
-    reg_no:"1001",
     clinic_name: "",
     speciality: "",
     experience: "",
@@ -25,38 +24,31 @@ class DoctorDetails extends Component {
 
   postData = (e) => {
     e.preventDefault();
-    fetch("/feed/post", {
+    fetch("http://localhost:8080/feed/post", {
       method: "post",
       headers: {
         "Content-Type": "application/json",
-        'Authorization': "Bearer " + localStorage.getItem("jwt"),
+        Authorization: "Bearer " + localStorage.getItem("jwt"),
       },
       body: JSON.stringify({
-        reg_no:this.state.reg_no,
         name_of_clinic: this.state.clinic_name,
         specialist: this.state.speciality,
         experience: this.state.experience,
         qualification: this.state.qualification,
-        fees: this.state.fees,
+        fees: Number(this.state.fees),
         timings: this.state.timings,
         gender: this.state.gender,
         address: this.state.address,
         city: this.state.city,
         state: this.state.state_input,
-        pin_code: this.state.pincode,
+        pin_code: Number(this.state.pincode),
         website: this.state.website,
-        phone_no: this.state.contact,
+        phone_no: Number(this.state.contact),
       }),
     })
       .then((res) => res.json())
       .then((data) => {
-        console.log(data.message);
-       /**  if (data.error) {
-          console.log(data.error);
-        } else {
-          console.log("posted");
-        }**/
-       // console.log("posted");
+        console.log(data);
       })
       .catch((err) => {
         console.log(err);

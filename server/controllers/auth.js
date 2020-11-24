@@ -1,18 +1,20 @@
-const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const configAuth = require('../config.json').auth;
+const User = require("../models/user");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const configAuth = require("../config.json").auth;
 
 exports.signup = async (req, res, next) => {
-  const {email,name,password} = req.body
+  const { email, name, password } = req.body;
   try {
-    let savedUser = await User.findOne({ email })
+    let savedUser = await User.findOne({ email });
     if (savedUser) {
-      const error = new Error('User already exists. Please enter a new email');
+      const error = new Error("User already exists. Please enter a new email");
       throw error;
-      
-      }
-    let hashedPassword = await bcrypt.hash(password, configAuth.passwordEncryptionKeyLength)
+    }
+    let hashedPassword = await bcrypt.hash(
+      password,
+      configAuth.passwordEncryptionKeyLength
+    );
     const user = new User({
       email,
       password: hashedPassword,
@@ -21,50 +23,46 @@ exports.signup = async (req, res, next) => {
     let result = await user.save();
 
     res.status(201).json({
-      message: 'User created!',
-      userId: result._id
-    })
+      message: "User created!",
+      userId: result._id,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(422).json({ error });
   }
-  catch (error) {
-    console.log(error)
-    return res.status(422).json({error})
-   
-  }
-}
+};
 
 exports.login = async (req, res, next) => {
-  const {email,password} = req.body
+  const { email, password } = req.body;
   let enteredUser;
   try {
-    let user = await User.findOne({ email })
+    let user = await User.findOne({ email });
     if (!user) {
-      const error = new Error('Enter valid credentials.');
+      const error = new Error("Enter valid credentials.");
       throw error;
     }
     enteredUser = user;
 
     let isEqual = await bcrypt.compare(password, user.password);
     if (!isEqual) {
-      const error = new Error('Wrong password!');
+      const error = new Error("Wrong password!");
       throw error;
     }
     const token = jwt.sign(
       {
         email: enteredUser.email,
-        userId: enteredUser._id.toString()
+        userId: enteredUser._id.toString(),
       },
       // the secret key
       configAuth.secretKey,
-      { expiresIn: '1h' }
+      { expiresIn: "1h" }
     );
     res.status(200).json({
       token: token,
-      userId: enteredUser._id.toString()
+      userId: enteredUser._id.toString(),
     });
+  } catch (error) {
+    console.log(error);
+    return res.status(422).json({ error: "Enter valid credentials" });
   }
-
-  catch (error) {
-    console.log(error)
-    return res.status(422).json({error:"Enter valid credentials"})
-  }
-}
+};
